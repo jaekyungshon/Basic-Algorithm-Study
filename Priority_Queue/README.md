@@ -84,8 +84,8 @@
 - 자식노드와 부모노드 인덱스 파악?
     > - Left Children Index = (Parent Index) * 2
     > - Right Children Index = (Parent Index) * 2 + 1
-    > - Parent Index = (Children) / 2
-    > <br/>
+    > - Parent Index = (Children) / 2 <br/><br/>
+    > 
     > **K진 트리의 인덱스 파악?**
     > - Children Index = (i*k) - (k-2)
     > - Parent Index = (i+k-2) / k
