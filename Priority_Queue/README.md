@@ -89,3 +89,93 @@
     > **K진 트리의 인덱스 파악?**
     > - Children Index = (i*k) - (k-2)
     > - Parent Index = (i+k-2) / k
+
+### 📌 히프 주요연산
+- `Max Heap`을 기준으로 설명.
+
+* * *
+
+**[삽입연산] - Insert Function**
+- `부모 노드와 비교하여 새로운 요소의 삽입 위치를 발견할 때까지 반복 탐색`
+- *초기상태 및 1번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/f6f9e937-e9f7-47d3-8c35-08b781e89691" width="300" height="300" alt="insert_process_01">
+  - 배열로 구현된 히프이기에, 각 노드에 넘버링(=배열 인덱스)가 가능하다.
+  - 번호순으로 가장 마지막 위치에 이어서 새로운 요소 8이 삽입.(Node Number: 11)
+
+- *2번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/e37223ed-0504-4aa1-ba52-6dc7be56cc73" width="300" height="300" alt="insert_process_02">
+  - 부모노드 4 < 삽입노드 8 이므로, 교환.
+
+- *3번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/c73577bd-1106-41e2-952f-6f02a98adca0" width="300" height="300" alt="insert_process_03">
+  - 부모노드 7 < 삽입노드 8 이므로, 교환.
+
+- *4번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/4e60ec20-b685-4f76-b131-a8928d4392ae" width="300" height="300" alt="insert_process_04">
+  - 부모노드 9 > 삽입노드 8 이므로, 교환하지 않음.
+
+- *의사 코드*
+  ```
+  insert_function(A,key):
+
+  1. heap_size <- heap_size + 1; // 히프 크기 하나 증가.
+  2. i <- heap_size; // 증가된 히프 위치에 새로운 노드 삽입.
+  3. A[i] <= key; 
+  4. while i!=1 and A[i] > A[PARENT(i)] do // i가 루트노드가 아니고, i번째노드가 i의 부모노드보다 크면
+  5.   A[i] <-> A[PARENT]; // i번째 노드와 부모노드 스위치.
+  6.   i <- PARENT(i); // 한 레벨 위로 올림.(높이 상승)
+  ```
+
+* * *
+
+**[삭제연산] - Delete Function**
+- `자식 노드와 비교하여 새로운 요소의 삽입 위치를 발견할 때까지 반복 탐색`
+- *초기상태 및 1번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/025c661c-8e60-4549-8f06-26fc24855c04" width="300" height="300" alt="delete_process_01">
+  - 먼저 루트 노드 삭제.
+  - 빈 루트 노드 자리에 히프의 마지막 노드를 가져온다.
+
+- *2번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/6d20101a-8ffc-4f46-bc02-62900463fdc4" width="300" height="300" alt="delete_process_02">
+  - 자식 중에서 큰 값과 교환된다.(최대 히프)
+  - 새로운 루트인 3과 자식 노드 8이 교환.
+
+- *3번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/f24d0aa0-0684-4984-8053-d32c533452cc" width="300" height="300" alt="delete_process_03">
+  - 오른쪽 자식노드인 7과 교환된다.
+
+- *4번째 단계*
+  - <img src="https://github.com/jaekyungshon/Basic-Algorithm-Study/assets/61006212/debc05fe-0577-4006-90bf-e96effa310c3" width="300" height="300" alt="delete_process_04">
+  - 단말 노드이므로, 더 이상 교환이 일어나지 않는다.
+  - 비단말 노드이고, 자식노드들 보다 값이 큰 경우도, 더 이상 교환이 일어나지 않는다.
+
+- *의사 코드*
+  ```
+  delete_function(A):
+
+  1. item <- A[i]; // root node 값 반환을 위한 item 변수.
+  2. A[1] <- A[heap_size]; // 말단 노드를 루트 노드로 옮김.
+  3. heap_size <- heap_size - 1; // 히프의 크기 하나 감소.
+  4. i <- 2; // 루트의 왼쪽 자식부터 비교 시작.
+  5. while i<= heap_size do // 히프트리를 벗어나지 않으면
+  6.   if i < heap_size and A[i+1] > A[i] // 오른쪽 자식이 더 크면
+  7.     then largest <- i+1; // 오른쪽 자식 선택
+  8.     else largest <- i; // 그렇지 않으면, 왼쪽 자식 선택
+  9.   if A[PARENT(largest)] > A[largest] // 부모노드가 더 크면
+  10.    then break; // 중지
+  11.  A[PARENT(largest)] <-> A[largest]; // 9번 조건 반대면, largest와 largest 부모노드 교환.
+  12.  i <- CHILD(largest); // 한 레벨 밑으로 내려간다.
+  13.
+  14. return item; // 최대값 반환.
+  ```
+
+
+* * *
+
+<br/>
+
+## 🖥️ 우선순위 큐(히프) 활용
+- `머신 스케쥴링` : `LPT Algorithm`
+- `허프만 코드`
+
+### 📌 Machine Schedling
